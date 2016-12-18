@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ActionsModel = new Schema({
+    project: { type: Schema.Types.ObjectId, ref: 'Project' },
     Name: String,
-    Date: {type: Date, default: Date.now},
+    ADate: {type: Date, default: Date.now},
     Place: String,
     Actives: {type: String, default: "true"},
     Regularity: {type: String, default: "false"},
@@ -36,7 +37,7 @@ const UserModel = new Schema({
     tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}],
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}]
 });
-const connection = mongoose.createConnection('mongodb://localhost:27017/taskboard');
+const connection = mongoose.createConnection('mongodb://localhost:27017/actions');
 const Actions = connection.model('Actions', ActionsModel),
     Meets = connection.model('Meets', MeetsModel),
     Notes = connection.model('Notes', NotesModel);

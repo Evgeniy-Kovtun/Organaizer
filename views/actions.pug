@@ -26,20 +26,20 @@ block content
                                                         h4 Описание
                                                 td(width='20%')
                                                         h4 Актуальность
-
                                 tbody
-                                        each v in Actions
-                                            tr
-                                                td(width='20%')
-                                                    h4 #{v.Name}
-                                                td(width='20%')
-                                                    h4 #{v.ADate}
-                                                td(width='20%')
-                                                    h4 #{v.Place}
-                                                td(width='20%')
-                                                    h4 #{v.Description}
-                                                td(width='20%')
-                                                    h4 #{v.Actives}
+                                    each v in action
+                                        tr
+                                            td(width='20%')
+                                                h4 #{v.Name}
+                                            td(width='20%')
+                                                h4 #{v.ADate}
+                                            td(width='20%')
+                                                h4 #{v.Place}
+                                            td(width='20%')
+                                                h4 #{v.Description}
+                                            td(width='20%')
+                                                h4 #{v.Actives}
+
 
         #myModal.modal.fade(tabindex='-1', role='dialog')
                 .modal-dialog.custom-class(role='document')

@@ -7,27 +7,21 @@ const express = require('express'),
     Actions = require('../Models/Task').Actions,
     Meets = require('../Models/Task').Meets,
     Notes = require('../Models/Task').Notes,
-    User = require('../Models/Task').User,
+    User = require('../Models/Task').Users,
     pug = require('pug'),
     async = require('async'),
     mongoose = require('mongoose');
 const upload = multer({dest: os.tmpdir()});
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index1.pug');
+  res.render('index1');
 });
 
-router.get('/login', function(req, res,next) {
-    router.get('/login',(req, res)=>{
+router.get('/login',(req, res)=>{
         "use strict";
-    if (req.session.user) {
-        res.redirect("/index1");
-    }
-    else{
-        res.render("/");
-    }
+        res.render("loginform");
 });
-});
+
 
 router.post('/login', (req, res) => { //коллекцию "admins" нужно создавать во множественном числе (пусть даже админ 1)
     "use strict";
@@ -43,7 +37,7 @@ router.post('/login', (req, res) => { //коллекцию "admins" нужно �
                     res.redirect('/');
                 }
                 else {
-                    res.redirect("/profile");
+                    res.redirect("/index1");
                 }
             });
         }
@@ -64,18 +58,18 @@ router.get('/logout', (req, res) => {
     });
 });
 router.get('/actions', function(req, res,next) {
-    res.render('actions.pug');
+    let resultArray= [];
+
+    res.render('actions');
 });
 router.get('/meets', function(req, res,next) {
-    res.render('meets.pug');
+    res.render('meets');
 });
 router.get('/notes', function(req, res,next) {
-    res.render('notes.pug');
+    res.render('notes');
 });
 router.post('/create', upload.array('files', 5), (req, res) => {
     "use strict";
-    let arrayOfTask = [];
-    async.parallel(arrayOfTask, (err, results) => {
     Actions.create({
             Name: req.body.Name,
             ADate: req.body.ADate,
@@ -91,13 +85,15 @@ router.post('/create', upload.array('files', 5), (req, res) => {
                         console.error(err);
                     }
                     else {
-                        doc.actions.push(object)
+                        doc.action.push(object);
+                        console.log(object);
                     }
                 })
             }
-        res.status(201)
+        let template = pug.renderFile(path.join(__dirname, '../Models/taskCard.pug'), {action: object});
+        res.status(201).json({html: template});
         });
 });
-});
+
 
 module.exports = router;
