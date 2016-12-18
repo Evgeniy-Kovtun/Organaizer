@@ -1,0 +1,100 @@
+extends layout
+block content
+        h1(align='center') События
+        p
+        table(align='center' width='60%')
+                tr
+                        td(width='30%')
+                                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Создать
+                        td(width='30%')
+                                a.btn.btn-danger Изменить
+                        td(width='30%')
+                                a.btn.btn-danger Удалить
+        p
+        .row
+                .col-lg-12.col-md-12.col-sm-12.col-xs-12
+                        table(class='table task-table' width='100%')
+                                thead
+                                        tr
+                                                td(width='20%')
+                                                        h4 Название
+                                                td(width='20%')
+                                                        h4 Дата
+                                                td(width='20%')
+                                                        h4 Место
+                                                td(width='20%')
+                                                        h4 Описание
+                                                td(width='20%')
+                                                        h4 Актуальность
+
+                                tbody
+                                        each v in Actions
+                                            tr
+                                                td(width='20%')
+                                                    h4 #{v.Name}
+                                                td(width='20%')
+                                                    h4 #{v.ADate}
+                                                td(width='20%')
+                                                    h4 #{v.Place}
+                                                td(width='20%')
+                                                    h4 #{v.Description}
+                                                td(width='20%')
+                                                    h4 #{v.Actives}
+
+        #myModal.modal.fade(tabindex='-1', role='dialog')
+                .modal-dialog.custom-class(role='document')
+                        .modal-content
+                                .modal-header
+                                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                                span(aria-hidden='true') ×
+                                        h4.modal-title Новое Событие
+                                .modal-body
+                                        form(id="create-form" enctype="multipart/form-data" class="form-horizontal" method="POST")
+                                                input(type="hidden" name="ownProject" value=ownProject)
+                                                label(for='Name') Название события
+                                                textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
+                                                label(for='Date') Дата
+                                                textarea#Date.form-control(minlength='5', maxlength='512', required='' name="ADate")
+                                                abel(for='Place') Место
+                                                textarea#Place.form-control(minlength='5', maxlength='512', required='' name="Place")
+                                                bel(for='Description') Описание
+                                                textarea#Description.form-control(minlength='5', maxlength='512', required='' name="Description")
+                                                label(for='Actives') Приоритет задачи
+                                                select#priority.inline(name='Actives')
+                                                        option(value='Актуальное', selected='selected') Актуальное
+                                                        option(value='Не Актуальное') Не Актуальное
+                                .modal-footer
+                                        button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
+                                        button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
+
+        script.
+            $(function () {
+                shave(".content h5", 70);
+                var d = new Date();
+                d = d.getTime();
+                if (jQuery('#reloadValue').val().length === 0) {
+                    jQuery('#reloadValue').val(d);
+                    jQuery('body').show();
+                }
+                else {
+                    jQuery('#reloadValue').val('');
+                    location.reload();
+                }
+                $("#create-form").on('submit', function (form) {
+                    tinyMCE.triggerSave();
+                    $.ajax({
+                        method: "POST",
+                        url: "/create",
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false
+                    })
+                        .fail(function (error) {
+                            // show error message
+                        })
+                        .always(function () {
+                            $("#myModal").modal("hide");
+                        });
+                    form.preventDefault();
+                })
+            });
