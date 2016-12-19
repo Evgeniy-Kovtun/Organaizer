@@ -63,8 +63,17 @@ router.get('/logout', (req, res) => {
         }
     });
 });
-router.get('/actions', function(req, res,next) {
-    res.render('actions.pug');
+router.get('/actions', function(req, res) {
+    Actions.find({}, function (err, data) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(data);
+            res.render('actions.pug', {actions: data});
+        }
+    });
+
 });
 router.get('/meets', function(req, res,next) {
     res.render('meets.pug');
@@ -72,32 +81,24 @@ router.get('/meets', function(req, res,next) {
 router.get('/notes', function(req, res,next) {
     res.render('notes.pug');
 });
-router.post('/create', upload.array('files', 5), (req, res) => {
+router.post('/create',  (req, res) => {
     "use strict";
-    let arrayOfTask = [];
-    async.parallel(arrayOfTask, (err, results) => {
+    console.log(req.body);
     Actions.create({
             Name: req.body.Name,
             ADate: req.body.ADate,
-            Place: eq.body.Place,
+            Place: req.body.Place,
             Description: req.body.Description,
             Actives: req.body.Actives
             },(err, object) => {
-            if (err) {
-                console.error(err);
-            } else {
-                object.findOne({ownProject: req.body.ownProject},function (err, doc) {
-                    if (err) {
-                        console.error(err);
-                    }
-                    else {
-                        doc.actions.push(object)
-                    }
-                })
-            }
-        res.status(201)
-        });
-});
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("USPESHO");
+            res.status(201).json(object)
+        }
+
+    })
 });
 
 module.exports = router;

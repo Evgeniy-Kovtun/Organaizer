@@ -28,7 +28,8 @@ block content
                                                         h4 Актуальность
 
                                 tbody
-                                        each v in Actions
+                                    if(actions)
+                                        each v in actions
                                             tr
                                                 td(width='20%')
                                                     h4 #{v.Name}
@@ -41,6 +42,7 @@ block content
                                                 td(width='20%')
                                                     h4 #{v.Actives}
 
+
         #myModal.modal.fade(tabindex='-1', role='dialog')
                 .modal-dialog.custom-class(role='document')
                         .modal-content
@@ -49,17 +51,17 @@ block content
                                                 span(aria-hidden='true') ×
                                         h4.modal-title Новое Событие
                                 .modal-body
-                                        form(id="create-form" enctype="multipart/form-data" class="form-horizontal" method="POST")
-                                                input(type="hidden" name="ownProject" value=ownProject)
+                                        form(id="create-form" class="form-horizontal")
+                                                input(type="hidden" name="ownProject" value=ownActions)
                                                 label(for='Name') Название события
                                                 textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
                                                 label(for='Date') Дата
                                                 textarea#Date.form-control(minlength='5', maxlength='512', required='' name="ADate")
-                                                abel(for='Place') Место
+                                                label(for='Place') Место
                                                 textarea#Place.form-control(minlength='5', maxlength='512', required='' name="Place")
-                                                bel(for='Description') Описание
+                                                label(for='Description') Описание
                                                 textarea#Description.form-control(minlength='5', maxlength='512', required='' name="Description")
-                                                label(for='Actives') Приоритет задачи
+                                                label(for='priority') Приоритет задачи
                                                 select#priority.inline(name='Actives')
                                                         option(value='Актуальное', selected='selected') Актуальное
                                                         option(value='Не Актуальное') Не Актуальное
@@ -69,32 +71,25 @@ block content
 
         script.
             $(function () {
-                shave(".content h5", 70);
-                var d = new Date();
-                d = d.getTime();
-                if (jQuery('#reloadValue').val().length === 0) {
-                    jQuery('#reloadValue').val(d);
-                    jQuery('body').show();
-                }
-                else {
-                    jQuery('#reloadValue').val('');
-                    location.reload();
-                }
-                $("#create-form").on('submit', function (form) {
-                    tinyMCE.triggerSave();
+                //shave(".content h5", 70);
+                $("#create-form").on('submit', function (e) {
+                    console.log("dhdhdfhdf");
                     $.ajax({
                         method: "POST",
                         url: "/create",
-                        data: new FormData(this),
-                        processData: false,
-                        contentType: false
+                        data: $(this).serialize()
                     })
                         .fail(function (error) {
                             // show error message
                         })
+                            .success(function(data){
+                                console.log(data);
+                                $(".task-table tbody").append("<tr><td>"+data.Name+"</td><td>"+data.ADate+"</td><td>"+data.Place+"</td><td>"+data.Description+"</td><td>"+data.Actives+"</td></tr>");
+                            })
                         .always(function () {
                             $("#myModal").modal("hide");
+
                         });
-                    form.preventDefault();
+                    e.preventDefault();
                 })
             });

@@ -36,7 +36,7 @@ const UserModel = new Schema({
     tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}],
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}]
 });
-const connection = mongoose.createConnection('mongodb://localhost:27017/taskboard');
+const connection = mongoose.createConnection('mongodb://localhost:27017/organaizer');
 const Actions = connection.model('Actions', ActionsModel),
     Meets = connection.model('Meets', MeetsModel),
     Notes = connection.model('Notes', NotesModel);
