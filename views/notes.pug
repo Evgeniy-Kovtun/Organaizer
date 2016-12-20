@@ -40,7 +40,7 @@ block content
                                 td(width='5%')
                                     a.btn.btn-danger Изменить
                                 td(width='5%')
-                                    abtn.btn-danger Удалить
+                                    a.btn.btn-danger(href="/remove" class="remove") Удалить
     #myModal.modal.fade(tabindex='-1', role='dialog')
         .modal-dialog.custom-class(role='document')
             .modal-content
@@ -87,4 +87,22 @@ block content
                 e.preventDefault();
 
             })
+        });
+        $(document).ready(function () {
+            $('.remove').click(function (t) {
+                $.ajax({
+                    method: "POST",
+                    url: "/remove",
+                    data: $(this)
+                })
+                    .fail(function (error) {
+                        // show error message
+                    })
+                    .success(function (data) {
+
+                        $(this).closest('tr').remove();
+                    })
+                t.preventDefault();
+
+            });
         });

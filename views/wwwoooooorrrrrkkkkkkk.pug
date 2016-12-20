@@ -11,4 +11,13 @@ tbody
         td(width='20%')
             h4 !{actions.Actives}//
 
+    $.ajax({
+method: "POST",
+url: "/remove",
+data: $(this)
+})
+    .fail(function (error) {
+    // show error message
+    })
+    .success(function (data) {
 

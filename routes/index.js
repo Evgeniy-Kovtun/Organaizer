@@ -93,7 +93,6 @@ router.get('/notes', function(req, res) {
             console.log(err);
         }
         else{
-            console.log(data);
             res.render('notes.pug', {notes: data});
         }
     });
@@ -154,13 +153,15 @@ router.post('/createNotes',  (req, res) => {
 
     })
 });
-/*router.post('/removeNotes',  (req, res) => {
+router.post('/remove',  (req, res) => {
     "use strict";
-    Notes.findById({_id: req.body._id}, function (err, object) {
+    console.log(req.body);
+    Notes.findOne({Name:req.body.Name}, function (err, object) {
+
         if (err) {
             console.log(err);
         } else
-            Notes.remove({_id: req.body._id}, function (err) {
+            Notes.remove({Name:req.body.Name}, function (err) {
                 if (err) {
                     res.sendStatus(500);
                 }
@@ -170,5 +171,5 @@ router.post('/createNotes',  (req, res) => {
             })
     })
     });
-*/
+
 module.exports = router;
