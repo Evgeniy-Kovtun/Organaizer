@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 const ActionsModel = new Schema({
     Name: String,
-    Date: {type: Date, default: Date.now},
+    ADate:String,
     Place: String,
     Actives: {type: String, default: "true"},
     Regularity: {type: String, default: "false"},
@@ -14,27 +14,20 @@ const ActionsModel = new Schema({
 });
 const MeetsModel = new Schema({
     Name: String,
-    ADate: {type: Date, default: Date.now},
+    MDate: String,
     Place: String,
     Regularity: {type: String, default: "false"},
     Description: String
 });
 const NotesModel = new Schema({
     Name: String,
-    Date: {type: Date, default: Date.now},
+    NDate: String,
     Tags: String,
     Description: String
 });
 const UserModel = new Schema({
-    name:  String,
-    surname: String,
-    avatar:{ type: String, default: '/images/avatars/no-avatar_jpg.jpg' },
     email:  String,
-    tel: { type: String, default: '-'},
-    skype: { type: String, default: '-'},
     password: String,
-    tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}],
-    projects: [{type: Schema.Types.ObjectId, ref: 'Project'}]
 });
 const connection = mongoose.createConnection('mongodb://localhost:27017/organaizer');
 const Actions = connection.model('Actions', ActionsModel),

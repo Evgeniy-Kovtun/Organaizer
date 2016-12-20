@@ -75,13 +75,30 @@ router.get('/actions', function(req, res) {
     });
 
 });
-router.get('/meets', function(req, res,next) {
-    res.render('meets.pug');
+router.get('/meets', function(req, res) {
+    Meets.find({}, function (err, data) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(data);
+            res.render('meets.pug', {meets: data});
+        }
+    });
 });
-router.get('/notes', function(req, res,next) {
-    res.render('notes.pug');
+
+router.get('/notes', function(req, res) {
+    Notes.find({}, function (err, data) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(data);
+            res.render('notes.pug', {notes: data});
+        }
+    });
 });
-router.post('/create',  (req, res) => {
+router.post('/createActions',  (req, res) => {
     "use strict";
     console.log(req.body);
     Actions.create({
@@ -100,5 +117,58 @@ router.post('/create',  (req, res) => {
 
     })
 });
+router.post('/createMeets',  (req, res) => {
+    "use strict";
+    console.log(req.body);
+    Meets.create({
+        Name: req.body.Name,
+        MDate: req.body.MDate,
+        Place: req.body.Place,
+        Description: req.body.Description,
+        Regularity: req.body.Regularity
+    },(err, object) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("USPESHO");
+            res.status(201).json(object)
+        }
 
+    })
+});
+router.post('/createNotes',  (req, res) => {
+    "use strict";
+    console.log(req.body);
+    Notes.create({
+        Name: req.body.Name,
+        NDate: req.body.NDate,
+        Tags: req.body.Tags,
+        Description: req.body.Description,
+        },(err, object) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log("USPESHO");
+            res.status(201).json(object)
+        }
+
+    })
+});
+/*router.post('/removeNotes',  (req, res) => {
+    "use strict";
+    Notes.findById({_id: req.body._id}, function (err, object) {
+        if (err) {
+            console.log(err);
+        } else
+            Notes.remove({_id: req.body._id}, function (err) {
+                if (err) {
+                    res.sendStatus(500);
+                }
+                else {
+                    res.sendStatus(200);
+                }
+            })
+    })
+    });
+*/
 module.exports = router;

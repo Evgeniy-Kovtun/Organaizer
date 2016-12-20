@@ -1,14 +1,95 @@
 extends layout
 block content
     h1(align='center') Встречи
-    table.table.table-bordered
+    p
+    table(align='center' width='60%')
         tr
-            td Название
-            td Дата
-            td Место
-            td Коментарий
-        tr
-            td
-            td
-            td
-            td
+            td(width='30%')
+                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Создать
+            td(width='30%')
+                a.btn.btn-danger Изменить
+            td(width='30%')
+                a.btn.btn-danger Удалить
+    p
+    .row
+        .col-lg-12.col-md-12.col-sm-12.col-xs-12
+            table(class='table task-table' width='100%')
+                thead
+                    tr
+                        td(width='20%')
+                            h4 Название
+                        td(width='20%')
+                            h4 Дата
+                        td(width='20%')
+                            h4 Место
+                        td(width='20%')
+                            h4 Описание
+                        td(width='20%')
+                            h4 Регулярность
+
+                tbody
+                    if(meets)
+                        each v in meets
+                            tr
+                                td(width='20%')
+                                    h4 #{v.Name}
+                                td(width='20%')
+                                    h4 #{v.MDate}
+                                td(width='20%')
+                                    h4 #{v.Place}
+                                td(width='20%')
+                                    h4 #{v.Description}
+                                td(width='20%')
+                                    h4 #{v.Regularity}
+
+
+    #myModal.modal.fade(tabindex='-1', role='dialog')
+        .modal-dialog.custom-class(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4.modal-title Новое Событие
+                .modal-body
+                    form(id="create-form" class="form-horizontal")
+                        input(type="hidden" name="ownProject" value=ownProject)
+                        label(for='Name') Название встречи
+                        textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
+                        label(for='MDate') Дата
+                        textarea#MDate.form-control(minlength='5', maxlength='512', required='' name="MDate")
+                        label(for='Place') Место
+                        textarea#Place.form-control(minlength='5', maxlength='512', required='' name="Place")
+                        label(for='Description') Описание
+                        textarea#Description.form-control(minlength='5', maxlength='512', required='' name="Description")
+                        label(for='regular') Регулярность встречи
+                        select#regular.inline(name='Regularity')
+                            option(value='Регулярная', selected='selected') Регулярная
+                            option(value='Не регулярная') Не регулярная
+                .modal-footer
+                    button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
+                    button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
+
+    script.
+        $(function () {
+            //shave(".content h5", 70);
+            $("#create-form").on('submit', function (e) {
+                console.log("dhdhdfhdf");
+                $.ajax({
+                    method: "POST",
+                    url: "/createMeets",
+                    data: $(this).serialize()
+                })
+                    .fail(function (error) {
+                        // show error message
+                    })
+                    .success(function(data){
+                        console.log(data);
+                        $(".task-table tbody").append("<tr><td>"+data.Name+"</td><td>"+data.MDate+"</td><td>"+data.Place+"</td><td>"+data.Description+"</td><td>"+data.Regularity+"</td></tr>");
+                    })
+                    .always(function () {
+                        $("#myModal").modal("hide");
+
+                    });
+                e.preventDefault();
+            })
+        });

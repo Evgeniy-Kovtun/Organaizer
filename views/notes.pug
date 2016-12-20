@@ -1,12 +1,90 @@
 extends layout
 block content
     h1(align='center') Заметки
-    table.table.table-bordered
-        tr(align='center')
-            td Название
-            td Теги
-            td Описание
+    p
+    table(align='center' width='60%')
         tr
             td
+            td(width='30%')
+                a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Создать
             td
-            td
+
+    p
+    .row
+        .col-lg-12.col-md-12.col-sm-12.col-xs-12
+            table(class='table task-table' width='100%')
+                thead
+                    tr
+                        td(width='15%')
+                            h4 Название
+                        td(width='15%')
+                            h4 Дата
+                        td(width='15%')
+                            h4 Теги
+                        td(width='15%')
+                            h4 Описание
+                        td(width='5%') Изменить
+                        td(width='5%') Удалить
+                tbody
+                    if(notes)
+                        each v in notes
+                            tr
+                                td(width='15%')
+                                    h4 #{v.Name}
+                                td(width='15%')
+                                    h4 #{v.NDate}
+                                td(width='15%')
+                                    h4 #{v.Tags}
+                                td(width='15%')
+                                    h4 #{v.Description}
+                                td(width='5%')
+                                    a.btn.btn-danger Изменить
+                                td(width='5%')
+                                    abtn.btn-danger Удалить
+    #myModal.modal.fade(tabindex='-1', role='dialog')
+        .modal-dialog.custom-class(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4.modal-title Новая заметка
+                .modal-body
+                    form(id="create-form" class="form-horizontal")
+                        input(type="hidden" name="ownProject" value=ownProject)
+                        label(for='Name') Название заметки
+                        textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
+                        label(for='NDate') Дата
+                        textarea#NDate.form-control(minlength='5', maxlength='512', required='' name="NDate")
+                        label(for='Tags') Теги
+                        textarea#Tags.form-control(minlength='5', maxlength='512', required='' name="Tags")
+                        label(for='Description') Описание
+                        textarea#Description.form-control(minlength='5', maxlength='512', required='' name="Description")
+                .modal-footer
+                    button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
+                    button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
+
+    script.
+        $(function () {
+            //shave(".content h5", 70);
+            $("#create-form").on('submit', function (e) {
+                console.log("dhdhdfhdf");
+                $.ajax({
+                    method: "POST",
+                    url: "/createNotes",
+                    data: $(this).serialize()
+                })
+                    .fail(function (error) {
+                        // show error message
+                    })
+                    .success(function(data){
+                        console.log(data);
+                        $(".task-table tbody").append("<tr><td>"+data.Name+"</td><td>"+data.NDate+"</td><td>"+data.Tags+"</td><td>"+data.Description+"</td></tr>");
+                    })
+                    .always(function () {
+                        $("#myModal").modal("hide");
+
+                    });
+                e.preventDefault();
+
+            })
+        });

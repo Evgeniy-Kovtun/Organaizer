@@ -52,16 +52,16 @@ block content
                                         h4.modal-title Новое Событие
                                 .modal-body
                                         form(id="create-form" class="form-horizontal")
-                                                input(type="hidden" name="ownProject" value=ownActions)
+                                                input(type="hidden" name="ownProject" value=ownProject)
                                                 label(for='Name') Название события
                                                 textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
-                                                label(for='Date') Дата
-                                                textarea#Date.form-control(minlength='5', maxlength='512', required='' name="ADate")
+                                                label(for='ADate') Дата
+                                                textarea#ADate.form-control(minlength='5', maxlength='512', required='' name="ADate")
                                                 label(for='Place') Место
                                                 textarea#Place.form-control(minlength='5', maxlength='512', required='' name="Place")
                                                 label(for='Description') Описание
                                                 textarea#Description.form-control(minlength='5', maxlength='512', required='' name="Description")
-                                                label(for='priority') Приоритет задачи
+                                                label(for='priority') Актуальность
                                                 select#priority.inline(name='Actives')
                                                         option(value='Актуальное', selected='selected') Актуальное
                                                         option(value='Не Актуальное') Не Актуальное
@@ -76,7 +76,7 @@ block content
                     console.log("dhdhdfhdf");
                     $.ajax({
                         method: "POST",
-                        url: "/create",
+                        url: "/createActions",
                         data: $(this).serialize()
                     })
                         .fail(function (error) {
