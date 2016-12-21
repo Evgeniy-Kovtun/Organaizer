@@ -39,7 +39,7 @@ block content
                                                 td(width='20%')
                                                     h4 #{v.Actives}
                                                 td(width='5%')
-                                                    a.btn.btn-danger Изменить
+                                                    a.btn.btn-danger(href="/change" class="change" data-id=v._id data-toggle='modal', data-target='#myModal1') Изменить
                                                 td(width='5%')
                                                     a.btn.btn-danger(href="/remove" class="remove" data-id=v._id) Удалить
 
@@ -54,7 +54,7 @@ block content
                                         form(id="create-form" class="form-horizontal")
                                                 input(type="hidden" name="ownProject" value=ownProject)
                                                 label(for='Name') Название события
-                                                textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
+                                                textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name" value=)
                                                 label(for='ADate') Дата
                                                 textarea#ADate.form-control(minlength='5', maxlength='512', required='' name="ADate")
                                                 label(for='Place') Место
@@ -68,7 +68,31 @@ block content
                                 .modal-footer
                                         button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
                                         button.btn.btn-danger(type='button' onclick="$('#create-form').submit()") Создать
-
+        #myModal1.modal.fade(tabindex='-1', role='dialog')
+            .modal-dialog.custom-class(role='document')
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                            span(aria-hidden='true') ×
+                        h4.modal-title Изменить Событие
+                    .modal-body
+                        form(id="change-form" class="form-horizontal")
+                            input(type="hidden" name="ownProject" value=ownProject)
+                            label(for='Name') Название события
+                            textarea#NewName.form-control(minlength='5', maxlength='512', required='' name="Name" )
+                            label(for='ADate') Дата
+                            textarea#NewADate.form-control(minlength='5', maxlength='512', required='' name="ADate")
+                            label(for='Place') Место
+                            textarea#NewPlace.form-control(minlength='5', maxlength='512', required='' name="Place")
+                            label(for='Description') Описание
+                            textarea#NewDescription.form-control(minlength='5', maxlength='512', required='' name="Description")
+                            label(for='newpriority') Актуальность
+                            select#newpriority.inline(name='newpriority')
+                                option(value='Актуальное', selected='selected') Актуальное
+                                option(value='Не Актуальное') Не Актуальное
+                    .modal-footer
+                        button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
+                        button.btn.btn-danger(type='button' onclick="$('#change-form').submit()") Создать
         script.
             $(function () {
                 //shave(".content h5", 70);
@@ -111,3 +135,25 @@ block content
 
                 });
             });
+            $(document).ready(function () {
+                $('.change').click(function (c) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/changeActions",
+                        data: {id: $(this).data('id')}
+                    })
+                            .fail(function (error) {
+                                // show error message
+                            })
+                            .success(function (data) {
+                                console.log(data);
+
+                            })
+                    c.preventDefault();
+                })
+
+                });
+            $(".change").on("click", function (eventSourse) {
+                $(eventSourse.target).parents().eq(1);
+            })
+

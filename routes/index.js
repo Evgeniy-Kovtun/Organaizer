@@ -207,5 +207,22 @@ router.post('/removeMeets',  (req, res) => {
             })
     })
 });
+router.post('/changeActions',  (req, res) => {
+    "use strict";
+    console.log(req.body);
+    Actions.findByIdAndUpdate(req.body.id, function (err, object) {
 
+        if (err) {
+            console.log(err);
+        } else
+            object.update(function (err) {
+                if (err) {
+                    res.sendStatus(500);
+                }
+                else {
+                    res.status(200).json({id:req.body.id});
+                }
+            })
+    })
+});
 module.exports = router;
