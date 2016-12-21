@@ -28,7 +28,7 @@ block content
                 tbody
                     if(notes)
                         each v in notes
-                            tr
+                            tr(id=v._id)
                                 td(width='15%')
                                     h4 #{v.Name}
                                 td(width='15%')
@@ -40,7 +40,7 @@ block content
                                 td(width='5%')
                                     a.btn.btn-danger Изменить
                                 td(width='5%')
-                                    a.btn.btn-danger(href="/remove" class="remove") Удалить
+                                    a.btn.btn-danger(href="/remove" class="remove" data-id=v._id) Удалить
     #myModal.modal.fade(tabindex='-1', role='dialog')
         .modal-dialog.custom-class(role='document')
             .modal-content
@@ -92,15 +92,15 @@ block content
             $('.remove').click(function (t) {
                 $.ajax({
                     method: "POST",
-                    url: "/remove",
-                    data: $(this)
+                    url: "/removeNotes",
+                    data: {id: $(this).data('id')}
                 })
                     .fail(function (error) {
                         // show error message
                     })
                     .success(function (data) {
-
-                        $(this).closest('tr').remove();
+                        console.log(data);
+                        $("#"+data.id).remove();
                     })
                 t.preventDefault();
 

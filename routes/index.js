@@ -153,23 +153,59 @@ router.post('/createNotes',  (req, res) => {
 
     })
 });
-router.post('/remove',  (req, res) => {
+router.post('/removeNotes',  (req, res) => {
     "use strict";
     console.log(req.body);
-    Notes.findOne({Name:req.body.Name}, function (err, object) {
+    Notes.findById(req.body.id, function (err, object) {
 
         if (err) {
             console.log(err);
         } else
-            Notes.remove({Name:req.body.Name}, function (err) {
+            object.remove(function (err) {
                 if (err) {
                     res.sendStatus(500);
                 }
                 else {
-                    res.sendStatus(200);
+                    res.status(200).json({id:req.body.id});
                 }
             })
     })
     });
+router.post('/removeActions',  (req, res) => {
+    "use strict";
+    console.log(req.body);
+    Actions.findById(req.body.id, function (err, object) {
+
+        if (err) {
+            console.log(err);
+        } else
+            object.remove(function (err) {
+                if (err) {
+                    res.sendStatus(500);
+                }
+                else {
+                    res.status(200).json({id:req.body.id});
+                }
+            })
+    })
+});
+router.post('/removeMeets',  (req, res) => {
+    "use strict";
+    console.log(req.body);
+    Meets.findById(req.body.id, function (err, object) {
+
+        if (err) {
+            console.log(err);
+        } else
+            object.remove(function (err) {
+                if (err) {
+                    res.sendStatus(500);
+                }
+                else {
+                    res.status(200).json({id:req.body.id});
+                }
+            })
+    })
+});
 
 module.exports = router;

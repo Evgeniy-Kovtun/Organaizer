@@ -6,10 +6,6 @@ block content
                 tr
                         td(width='30%')
                                 a.btn.btn-warning(type='button', data-toggle='modal', data-target='#myModal') Создать
-                        td(width='30%')
-                                a.btn.btn-danger Изменить
-                        td(width='30%')
-                                a.btn.btn-danger Удалить
         p
         .row
                 .col-lg-12.col-md-12.col-sm-12.col-xs-12
@@ -27,10 +23,11 @@ block content
                                                 td(width='20%')
                                                         h4 Актуальность
 
+
                                 tbody
                                     if(actions)
                                         each v in actions
-                                            tr
+                                            tr(id=v._id)
                                                 td(width='20%')
                                                     h4 #{v.Name}
                                                 td(width='20%')
@@ -41,7 +38,10 @@ block content
                                                     h4 #{v.Description}
                                                 td(width='20%')
                                                     h4 #{v.Actives}
-
+                                                td(width='5%')
+                                                    a.btn.btn-danger Изменить
+                                                td(width='5%')
+                                                    a.btn.btn-danger(href="/remove" class="remove" data-id=v._id) Удалить
 
         #myModal.modal.fade(tabindex='-1', role='dialog')
                 .modal-dialog.custom-class(role='document')
@@ -92,4 +92,22 @@ block content
                         });
                     e.preventDefault();
                 })
+            });
+            $(document).ready(function () {
+                $('.remove').click(function (a) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/removeActions",
+                        data: {id: $(this).data('id')}
+                    })
+                            .fail(function (error) {
+                                // show error message
+                            })
+                            .success(function (data) {
+                                console.log(data);
+                                $("#" + data.id).remove();
+                            })
+                    a.preventDefault();
+
+                });
             });
