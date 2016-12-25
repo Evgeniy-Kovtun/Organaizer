@@ -25,15 +25,21 @@ const NotesModel = new Schema({
     Tags: String,
     Description: String
 });
-const UserModel = new Schema({
+const AdminsModel = new Schema({
     email:  String,
     password: String,
 });
 const connection = mongoose.createConnection('mongodb://localhost:27017/organaizer');
+
+/*AdminModel.statics.findByEmail = (email, cb) => {
+    return AdminModel.findOne({email: email}, cb);
+};
+*/
 const Actions = connection.model('Actions', ActionsModel),
     Meets = connection.model('Meets', MeetsModel),
     Notes = connection.model('Notes', NotesModel);
-    User = connection.model('User', UserModel);
+    Admins = connection.model('Admins', AdminsModel);
 module.exports.Actions = Actions;
 module.exports.Meets = Meets;
 module.exports.Notes = Notes;
+module.exports.Admins = Admins;

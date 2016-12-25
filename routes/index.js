@@ -7,7 +7,7 @@ const express = require('express'),
     Actions = require('../Models/Task').Actions,
     Meets = require('../Models/Task').Meets,
     Notes = require('../Models/Task').Notes,
-    User = require('../Models/Task').User,
+    Admins = require('../Models/Task').Admins,
     pug = require('pug'),
     async = require('async'),
     mongoose = require('mongoose');
@@ -18,37 +18,35 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res,next) {
-    router.get('/login',(req, res)=>{
-        "use strict";
-    if (req.session.user) {
-        res.redirect("/index1");
-    }
-    else{
-        res.render("/");
-    }
-});
-});
+       "use strict";
+
+            res.render("loginform.pug");
+
+    });
+
 
 router.post('/login', (req, res) => { //коллекцию "admins" нужно создавать во множественном числе (пусть даже админ 1)
-    "use strict";
-    User.findByEmail(req.body.username, (err, user) => {
-        if (err) {
-            res.redirect('/');
-        }
-        else {
-            req.session.user = user;
-            req.session.save((err) => {
-                if (err) {
-                    console.error(err);
-                    res.redirect('/');
-                }
-                else {
-                    res.redirect("/profile");
-                }
-            });
-        }
-    })
-});
+        "use strict";
+    console.log(req.body);
+    Admins.findByEmail(req.body.email, (err, user) => {
+            if (err) {
+                res.redirect('/admin');
+            }
+            else {
+                req.session.user = user;
+                req.session.save((err) => {
+                    if (err) {
+                        console.error(err);
+                        res.redirect('/admin');
+                    }
+                    else {
+                        res.redirect("/");
+                    }
+                });
+            }
+        })
+    });
+
 router.get('/logout', (req, res) => {
     "use strict";
     // req.logout();
@@ -210,12 +208,12 @@ router.post('/removeMeets',  (req, res) => {
 router.post('/changeActions',  (req, res) => {
     "use strict";
     console.log(req.body);
-    Actions.findByIdAndUpdate(req.body.id, function (err, object) {
+    Actions.findByIdAndUpdate(req.body.id,{$set:req.body}, function(err, result){
 
         if (err) {
             console.log(err);
         } else
-            object.update(function (err) {
+            result.update(function (err) {
                 if (err) {
                     res.sendStatus(500);
                 }

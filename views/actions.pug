@@ -79,7 +79,7 @@ block content
                         form(id="change-form" class="form-horizontal")
                             input(type="hidden" name="ownProject" value=ownProject)
                             label(for='Name') Название события
-                            textarea#NewName.form-control(minlength='5', maxlength='512', required='' name="Name" )
+                            textarea#NewName.form-control(minlength='5', maxlength='512', required='' name="Name")
                             label(for='ADate') Дата
                             textarea#NewADate.form-control(minlength='5', maxlength='512', required='' name="ADate")
                             label(for='Place') Место
@@ -92,7 +92,7 @@ block content
                                 option(value='Не Актуальное') Не Актуальное
                     .modal-footer
                         button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
-                        button.btn.btn-danger(type='button' onclick="$('#change-form').submit()") Создать
+                        button.btn.btn-danger(type='button' onclick="$('#change-form').submit()") Изменить
         script.
             $(function () {
                 //shave(".content h5", 70);
@@ -154,6 +154,9 @@ block content
 
                 });
             $(".change").on("click", function (eventSourse) {
-                $(eventSourse.target).parents().eq(1);
-            })
-
+            var tr = ths.parentNode.parentNode,
+                name = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+                date = tr.getElementsByTagName("td")[2].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+                place = tr.getElementsByTagName("td")[3].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+                description = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", "")
+                });
