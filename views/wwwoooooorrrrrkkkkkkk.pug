@@ -23,5 +23,21 @@ data: $(this)
 
     //
     $(".change").on("click", function (eventSourse) {
-    $(eventSourse.target).parents().eq(1);
+    $(eventSourse.target).parents().eq(1); - родительская хрень
 })
+$(".change").on("click", function (eventSourse) {
+var tr = ths.parentNode.parentNode,
+name = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+date = tr.getElementsByTagName("td")[2].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+place = tr.getElementsByTagName("td")[3].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+description = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", "")
+console.log(name+date+place+description)
+});
+$(".change").on("click", function (eventSourse) {//getActionById(:id)
+eventSourse.preventDefault();
+
+    var tr = thіs.parentNode.parentNode,
+name = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+date = tr.getElementsByTagName("td")[2].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+place = tr.getElementsByTagName("td")[3].innerHTML.replace("<h4>", "").replace("</h4>", ""),
+description = tr.getElementsByTagName("td")[4].innerHTML.replace("<h4>", "").replace("</h4>", "")

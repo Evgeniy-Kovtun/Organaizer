@@ -39,7 +39,7 @@ block content
                                                 td(width='20%')
                                                     h4 #{v.Actives}
                                                 td(width='5%')
-                                                    a.btn.btn-danger(href="/change" class="change" data-id=v._id data-toggle='modal', data-target='#myModal1') Изменить
+                                                    a.btn.btn-danger(class="change" data-toggle='modal', data-target='#myModal1' data-id=v._id) Изменить
                                                 td(width='5%')
                                                     a.btn.btn-danger(href="/remove" class="remove" data-id=v._id) Удалить
 
@@ -54,7 +54,7 @@ block content
                                         form(id="create-form" class="form-horizontal")
                                                 input(type="hidden" name="ownProject" value=ownProject)
                                                 label(for='Name') Название события
-                                                textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name" value=)
+                                                textarea#Name.form-control(minlength='5', maxlength='512', required='' name="Name")
                                                 label(for='ADate') Дата
                                                 textarea#ADate.form-control(minlength='5', maxlength='512', required='' name="ADate")
                                                 label(for='Place') Место
@@ -93,70 +93,4 @@ block content
                     .modal-footer
                         button.btn.btn-warning(type='button', data-dismiss='modal') Отмена
                         button.btn.btn-danger(type='button' onclick="$('#change-form').submit()") Изменить
-        script.
-            $(function () {
-                //shave(".content h5", 70);
-                $("#create-form").on('submit', function (e) {
-                    console.log("dhdhdfhdf");
-                    $.ajax({
-                        method: "POST",
-                        url: "/createActions",
-                        data: $(this).serialize()
-                    })
-                        .fail(function (error) {
-                            // show error message
-                        })
-                            .success(function(data){
-                                console.log(data);
-                                $(".task-table tbody").append("<tr><td>"+data.Name+"</td><td>"+data.ADate+"</td><td>"+data.Place+"</td><td>"+data.Description+"</td><td>"+data.Actives+"</td></tr>");
-                            })
-                        .always(function () {
-                            $("#myModal").modal("hide");
-
-                        });
-                    e.preventDefault();
-                })
-            });
-            $(document).ready(function () {
-                $('.remove').click(function (a) {
-                    $.ajax({
-                        method: "POST",
-                        url: "/removeActions",
-                        data: {id: $(this).data('id')}
-                    })
-                            .fail(function (error) {
-                                // show error message
-                            })
-                            .success(function (data) {
-                                console.log(data);
-                                $("#" + data.id).remove();
-                            })
-                    a.preventDefault();
-
-                });
-            });
-            $(document).ready(function () {
-                $('.change').click(function (c) {
-                    $.ajax({
-                        method: "POST",
-                        url: "/changeActions",
-                        data: {id: $(this).data('id')}
-                    })
-                            .fail(function (error) {
-                                // show error message
-                            })
-                            .success(function (data) {
-                                console.log(data);
-
-                            })
-                    c.preventDefault();
-                })
-
-                });
-            $(".change").on("click", function (eventSourse) {
-            var tr = ths.parentNode.parentNode,
-                name = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", ""),
-                date = tr.getElementsByTagName("td")[2].innerHTML.replace("<h4>", "").replace("</h4>", ""),
-                place = tr.getElementsByTagName("td")[3].innerHTML.replace("<h4>", "").replace("</h4>", ""),
-                description = tr.getElementsByTagName("td")[1].innerHTML.replace("<h4>", "").replace("</h4>", "")
-                });
+        script(src='javascripts/actions.js')
